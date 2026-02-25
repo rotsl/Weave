@@ -5,11 +5,21 @@
 # http://www.apache.org/licenses/LICENSE-2.0
 
 # GitHub Actions CI workflow
-# Runs linting and tests only when manually triggered
+# Runs linting and tests on pushes (and manually when needed)
 
 name: CI
 
 on:
+  push:
+    branches:
+      - main
+      - master
+      - develop
+  pull_request:
+    branches:
+      - main
+      - master
+      - develop
   workflow_dispatch:
 
 jobs:

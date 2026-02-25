@@ -30,7 +30,6 @@
     "css-generator",
     "zero-config",
     "semantic-html",
-    "wisp",
     "static-site-generator",
     "landing-page",
     "website-builder"
@@ -39,12 +38,17 @@
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/rotsl/weave"
+    "url": "git+https://github.com/rotsl/Weave.git",
+    "directory": "packages/weave"
   },
   "bugs": {
-    "url": "https://github.com/rotsl/weave/issues"
+    "url": "https://github.com/rotsl/Weave/issues"
   },
-  "homepage": "https://github.com/rotsl/weave#readme",
+  "homepage": "https://github.com/rotsl/Weave/tree/main/packages/weave#readme",
+  "funding": {
+    "type": "buymeacoffee",
+    "url": "https://buymeacoffee.com/rorexus"
+  },
   "devDependencies": {
     "@types/node": "^20.0.0",
     "tsup": "^8.0.0",

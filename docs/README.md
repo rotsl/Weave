@@ -1,41 +1,37 @@
-# Weave Documentation
+# Weave Docs
 
-This folder contains user-facing documentation for writing Weave scripts.
+This folder contains the practical references for writing and validating Weave scripts.
 
-## Reading Order
+## Read in This Order
 
-1. `HowToUseWeave.md` # start here for complete usage flow
-2. `syntax.md` # learn all supported keywords/properties
-3. `examples.md` # copy and adapt ready-made scripts
+1. `HowToUseWeave.md` # complete walkthrough from script to output
+2. `syntax.md` # supported statements, blocks, and options
+3. `examples.md` # copy-ready script examples
 
-## Docs Structure
+## Docs Folder Structure
 
 ```text
 docs/
-├── README.md                            # docs index and navigation
-├── HowToUseWeave.md                     # step-by-step usage guide
+├── README.md                            # navigation + maintenance notes
+├── HowToUseWeave.md                     # guided usage and workflow
 ├── syntax.md                            # language reference
-└── examples.md                          # example scripts from simple to complex
+└── examples.md                          # runnable examples for quick starts
 ```
 
-## How These Docs Map to the Project
+## How Docs Map to Code
 
-- Editor UI: `src/app/page.tsx` # in-browser authoring and preview
-- Parser: `src/lib/weave/parser.ts` # turns text into AST
-- Compiler: `src/lib/weave/compiler.ts` # turns AST into HTML
-- npm package mirror: `packages/weave/src/*` # reusable package source
+- `src/lib/weave/parser.ts` # parser implementation (`parseWeave`)
+- `src/lib/weave/compiler.ts` # compiler implementation (`compileWeave`)
+- `packages/weave/src/*` # npm package mirror of core engine
+- `src/app/page.tsx` # editor UI for authoring and preview
 
-## Example Case
+## Example Workflow
 
-If you want a fast starting point, use this path:
+1. Copy a script from `examples.md`.
+2. Paste it into the local editor (`bun run dev`).
+3. Confirm output in preview.
+4. Re-check syntax rules in `syntax.md` if parsing fails.
 
-1. Open `examples.md`.
-2. Copy a complete script (for example, a SaaS or portfolio page).
-3. Paste into the editor (`src/app/page.tsx` UI).
-4. Preview and export generated HTML.
+## Maintenance Rule
 
-## Maintenance Notes
-
-- Keep syntax rules in `syntax.md` aligned with parser behavior.
-- Keep `examples.md` runnable against current parser/compiler.
-- When adding new language features, update all three docs files in the same change.
+When syntax or compiler behavior changes, update `HowToUseWeave.md`, `syntax.md`, and `examples.md` in the same PR.

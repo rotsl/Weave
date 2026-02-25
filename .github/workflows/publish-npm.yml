@@ -5,11 +5,18 @@
 # http://www.apache.org/licenses/LICENSE-2.0
 
 # GitHub Actions workflow for publishing @rotsl/weave to npm
-# This workflow publishes the Weave package to npm only when manually triggered
+# Runs on push and manual trigger; skips publish when version already exists
 
 name: Publish Weave to npm
 
 on:
+  push:
+    branches:
+      - main
+      - master
+    paths:
+      - 'packages/weave/**'
+      - '.github/workflows/publish-npm.yml'
   workflow_dispatch:
 
 jobs:
@@ -43,7 +50,22 @@ jobs:
         run: bun test || echo "No tests configured"
         continue-on-error: true
 
+      - name: Check if version is already published on npm
+        id: npm_check
+        working-directory: ./packages/weave
+        run: |
+          PKG_NAME=$(node -p "require('./package.json').name")
+          PKG_VERSION=$(node -p "require('./package.json').version")
+          echo "Checking $PKG_NAME@$PKG_VERSION"
+          if npm view "$PKG_NAME@$PKG_VERSION" version >/dev/null 2>&1; then
+            echo "already_published=true" >> "$GITHUB_OUTPUT"
+            echo "Version already exists on npm. Skipping publish."
+          else
+            echo "already_published=false" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Publish to npm
+        if: steps.npm_check.outputs.already_published == 'false'
         working-directory: ./packages/weave
         run: npm publish --access public
         env:
@@ -76,7 +98,21 @@ jobs:
         working-directory: ./packages/weave
         run: bun run build
 
+      - name: Check if version is already published on GitHub Packages
+        id: gpr_check
+        working-directory: ./packages/weave
+        run: |
+          PKG_NAME=$(node -p "require('./package.json').name")
+          PKG_VERSION=$(node -p "require('./package.json').version")
+          if npm view "$PKG_NAME@$PKG_VERSION" version --registry=https://npm.pkg.github.com >/dev/null 2>&1; then
+            echo "already_published=true" >> "$GITHUB_OUTPUT"
+            echo "Version already exists on GitHub Packages. Skipping publish."
+          else
+            echo "already_published=false" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Publish to GitHub Packages
+        if: steps.gpr_check.outputs.already_published == 'false'
         working-directory: ./packages/weave
         run: npm publish
         env:

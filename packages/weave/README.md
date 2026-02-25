@@ -1,9 +1,9 @@
 # @rotsl/weave
 
-`@rotsl/weave` is the npm package for parsing and compiling Weave scripts.
+`@rotsl/weave` is the standalone parser/compiler package for Weave scripts.
 
-- Input: natural-language Weave text
-- Output: complete HTML (embedded CSS + embedded JS)
+- Input: plain-English Weave script
+- Output: complete HTML document (CSS + JS included)
 
 ## Install
 
@@ -17,71 +17,37 @@ npm install @rotsl/weave
 import { parseWeave, compileWeave } from '@rotsl/weave';
 
 const script = `
-A page called "My Site"
-  With a header
-    Showing "My Brand"
-  With a hero
-    Showing "Build faster"
-    With subtitle "Write your page in plain English"
-    With a primary button "Get Started"
-  With a footer
-    Copyright "2026 My Company"
-  Using modern theme
-`;
-
-const ast = parseWeave(script);
-const html = compileWeave(ast);
-
-console.log(html);
-```
-
-## Example Case
-
-Generate a product landing page during a build step:
-
-```ts
-import { parseWeave, compileWeave } from '@rotsl/weave';
-
-const code = `
 A page called "LaunchPad"
   With a hero
-    Showing "Ship Your Product Faster"
-    With subtitle "Generate clean pages from plain English"
+    Showing "Ship faster with Weave"
+    With subtitle "Natural-language scripts to full HTML"
     With a primary button "Get Started"
   Using corporate theme
 `;
 
-const html = compileWeave(parseWeave(code), { minify: true });
-// write html to disk or publish artifact
+const ast = parseWeave(script);
+const html = compileWeave(ast, { minify: true });
+
+console.log(html);
 ```
 
 ## API
 
 ### `parseWeave(code: string): WeaveAST`
 
-Parses Weave text into an AST structure.
+Parses Weave script text into an AST.
 
 ### `compileWeave(ast: WeaveAST, options?: { minify?: boolean }): string`
 
-Compiles an AST into a full HTML document.
+Compiles AST into a full HTML document string.
 
 ### `themes`
 
-Built-in theme definitions object.
+Built-in theme registry.
 
 ### `generateThemeCSS(themeName: string, darkMode: boolean): string`
 
-Generates CSS variables/styles for a specific theme.
-
-## Common Usage Patterns
-
-- Parse only (for validation/editor tooling).
-- Parse + compile (for final export).
-- Compile with minification:
-
-```ts
-const html = compileWeave(ast, { minify: true });
-```
+Returns theme CSS for a selected built-in theme.
 
 ## Built-in Themes
 
@@ -92,9 +58,11 @@ const html = compileWeave(ast, { minify: true });
 - `elegant`
 - `dark`
 
-## Package Development
+## Example Case
 
-From repository root:
+Use `@rotsl/weave` inside a build script to generate static landing pages from `.weave` text sources.
+
+## Develop Package Locally
 
 ```bash
 cd packages/weave
@@ -102,28 +70,30 @@ bun install
 bun run build
 ```
 
-## Package Folder Structure
+## Package Structure
 
 ```text
 packages/weave/
 ├── src/
-│   ├── index.ts                        # public exports
-│   ├── parser.ts                       # text -> AST parser
-│   ├── compiler.ts                     # AST -> HTML compiler
-│   ├── types.ts                        # Weave AST/types definitions
+│   ├── index.ts                        # public package exports
+│   ├── parser.ts                       # script text -> AST
+│   ├── compiler.ts                     # AST -> HTML
+│   ├── types.ts                        # AST/type definitions
 │   └── themes/
-│       └── index.ts                    # built-in themes + theme CSS helpers
-├── dist/                               # generated package output
+│       └── index.ts                    # built-in themes and CSS generation
+├── dist/                               # build output (published)
+├── package.json                        # npm metadata for @rotsl/weave
+├── README.md                           # package docs
 ├── LICENSE                             # package license
-├── package.json                        # npm metadata (@rotsl/weave)
-├── tsconfig.json                       # package TS config
-└── README.md                           # package documentation
+└── tsconfig.json                       # package TypeScript config
 ```
 
-## Notes
+## Publishing and GitHub Visibility
 
-- The package emits self-contained HTML suitable for static hosting.
-- The repository’s GitHub publish workflow runs from this folder (`packages/weave`).
+- Package name: `@rotsl/weave`
+- npm access: `public`
+- Repository metadata links npm users to `https://github.com/rotsl/Weave`
+- Monorepo package directory is declared so the npm page resolves to `packages/weave`
 
 ## License
 

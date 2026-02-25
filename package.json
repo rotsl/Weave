@@ -2,6 +2,10 @@
   "name": "weave-editor",
   "version": "0.2.0",
   "private": true,
+  "funding": {
+    "type": "buymeacoffee",
+    "url": "https://buymeacoffee.com/rorexus"
+  },
   "scripts": {
     "dev": "next dev -p 3000 2>&1 | tee dev.log",
     "build": "next build --webpack && cp -r .next/static .next/standalone/.next/ && cp -r public .next/standalone/",
