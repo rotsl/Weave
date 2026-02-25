@@ -35,6 +35,26 @@ const html = compileWeave(ast);
 console.log(html);
 ```
 
+## Example Case
+
+Generate a product landing page during a build step:
+
+```ts
+import { parseWeave, compileWeave } from '@rotsl/weave';
+
+const code = `
+A page called "LaunchPad"
+  With a hero
+    Showing "Ship Your Product Faster"
+    With subtitle "Generate clean pages from plain English"
+    With a primary button "Get Started"
+  Using corporate theme
+`;
+
+const html = compileWeave(parseWeave(code), { minify: true });
+// write html to disk or publish artifact
+```
+
 ## API
 
 ### `parseWeave(code: string): WeaveAST`

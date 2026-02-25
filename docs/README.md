@@ -25,6 +25,15 @@ docs/
 - Compiler: `src/lib/weave/compiler.ts` # turns AST into HTML
 - npm package mirror: `packages/weave/src/*` # reusable package source
 
+## Example Case
+
+If you want a fast starting point, use this path:
+
+1. Open `examples.md`.
+2. Copy a complete script (for example, a SaaS or portfolio page).
+3. Paste into the editor (`src/app/page.tsx` UI).
+4. Preview and export generated HTML.
+
 ## Maintenance Notes
 
 - Keep syntax rules in `syntax.md` aligned with parser behavior.
