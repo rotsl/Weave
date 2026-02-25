@@ -5,18 +5,11 @@
 # http://www.apache.org/licenses/LICENSE-2.0
 
 # GitHub Actions workflow for publishing @rotsl/weave to npm
-# Runs on push and manual trigger; skips publish when version already exists
+# Runs only on manual trigger; skips publish when version already exists
 
 name: Publish Weave to npm
 
 on:
-  push:
-    branches:
-      - main
-      - master
-    paths:
-      - 'packages/weave/**'
-      - '.github/workflows/publish-npm.yml'
   workflow_dispatch:
 
 jobs:
