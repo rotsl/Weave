@@ -1,0 +1,59 @@
+{
+  "name": "@rotsl/weave",
+  "version": "1.0.0",
+  "description": "A natural language web framework - Write websites in plain English",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsup src/index.ts --format cjs,esm --dts --clean",
+    "dev": "tsup src/index.ts --format cjs,esm --dts --watch",
+    "lint": "eslint src --ext .ts",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "weave",
+    "natural-language",
+    "web-framework",
+    "html-generator",
+    "css-generator",
+    "zero-config",
+    "semantic-html",
+    "wisp",
+    "static-site-generator",
+    "landing-page",
+    "website-builder"
+  ],
+  "author": "Rohan R",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rotsl/weave"
+  },
+  "bugs": {
+    "url": "https://github.com/rotsl/weave/issues"
+  },
+  "homepage": "https://github.com/rotsl/weave#readme",
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "tsup": "^8.0.0",
+    "typescript": "^5.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
