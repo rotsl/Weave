@@ -64,6 +64,16 @@ jobs:
             echo "already_published=false" >> "$GITHUB_OUTPUT"
           fi
 
+      - name: Validate npm token
+        if: steps.npm_check.outputs.already_published == 'false'
+        run: |
+          if [ -z "${NPM_TOKEN}" ]; then
+            echo "::error::Missing NPM_TOKEN secret. Add an npm automation token in GitHub: Settings -> Secrets and variables -> Actions -> New repository secret (name: NPM_TOKEN)."
+            exit 1
+          fi
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
       - name: Publish to npm
         if: steps.npm_check.outputs.already_published == 'false'
         working-directory: ./packages/weave

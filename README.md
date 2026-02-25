@@ -8,6 +8,8 @@
 
 Weave turns plain-English page scripts into complete, production-ready HTML.
 
+> Weave pages like you'd knit your sweater. Stay warm! ❤️
+
 - Describe sections, content, buttons, and layout in readable text.
 - Parse script text into a typed AST with `parseWeave`.
 - Compile that AST into a full HTML document with `compileWeave`.
@@ -145,12 +147,10 @@ weave/
 - See `CHANGELOG.md`
 - See `CODE_OF_CONDUCT.md`
 
-## Support
 
-- Buy Me a Coffee: [buymeacoffee.com/rorexus](https://buymeacoffee.com/rorexus)
 
 <div align="center" style="margin-top: 28px; padding: 18px; border: 1px solid #d0d7de; border-radius: 12px;">
-  <h3 style="margin: 0;">🌬️ Weave</h3>
+  <h3 style="margin: 0;">𐂝 Weave</h3>
   <p style="margin: 8px 0 0;"><strong>Design that thinks for you</strong></p>
   <p style="margin: 8px 0 0;">Plain-English Scripts • Instant Preview • Production HTML</p>
   <p style="margin: 12px 0 0;">
