@@ -1,0 +1,11 @@
+cff-version: 1.2.0
+message: "If you use Weave, please cite it using this metadata."
+title: "Weave"
+version: "1.0.0"
+date-released: 2026-02-25
+authors:
+  - family-names: "R"
+    given-names: "Rohan"
+repository-code: "https://github.com/rotsl/Weave"
+url: "https://github.com/rotsl/Weave"
+license: "Apache-2.0"

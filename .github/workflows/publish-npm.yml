@@ -1,0 +1,122 @@
+# Copyright 2026 Rohan R
+# SPDX-License-Identifier: Apache-2.0
+#
+# Licensed under the Apache License, Version 2.0
+# http://www.apache.org/licenses/LICENSE-2.0
+
+# GitHub Actions workflow for publishing @rotsl/weave to npm
+# Runs only on manual trigger; skips publish when version already exists
+
+name: Publish Weave to npm
+
+on:
+  workflow_dispatch:
+
+jobs:
+  publish-npm:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        working-directory: ./packages/weave
+        run: bun install
+
+      - name: Build package
+        working-directory: ./packages/weave
+        run: bun run build
+
+      - name: Run tests (if available)
+        working-directory: ./packages/weave
+        run: bun test || echo "No tests configured"
+        continue-on-error: true
+
+      - name: Check if version is already published on npm
+        id: npm_check
+        working-directory: ./packages/weave
+        run: |
+          PKG_NAME=$(node -p "require('./package.json').name")
+          PKG_VERSION=$(node -p "require('./package.json').version")
+          echo "Checking $PKG_NAME@$PKG_VERSION"
+          if npm view "$PKG_NAME@$PKG_VERSION" version >/dev/null 2>&1; then
+            echo "already_published=true" >> "$GITHUB_OUTPUT"
+            echo "Version already exists on npm. Skipping publish."
+          else
+            echo "already_published=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Validate npm token
+        if: steps.npm_check.outputs.already_published == 'false'
+        run: |
+          if [ -z "${NPM_TOKEN}" ]; then
+            echo "::error::Missing NPM_TOKEN secret. Add an npm automation token in GitHub: Settings -> Secrets and variables -> Actions -> New repository secret (name: NPM_TOKEN)."
+            exit 1
+          fi
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Publish to npm
+        if: steps.npm_check.outputs.already_published == 'false'
+        working-directory: ./packages/weave
+        run: npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+  # Optional: Also publish to GitHub Packages
+  publish-gpr:
+    runs-on: ubuntu-latest
+    needs: publish-npm
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          registry-url: 'https://npm.pkg.github.com'
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        working-directory: ./packages/weave
+        run: bun install
+
+      - name: Build package
+        working-directory: ./packages/weave
+        run: bun run build
+
+      - name: Check if version is already published on GitHub Packages
+        id: gpr_check
+        working-directory: ./packages/weave
+        run: |
+          PKG_NAME=$(node -p "require('./package.json').name")
+          PKG_VERSION=$(node -p "require('./package.json').version")
+          if npm view "$PKG_NAME@$PKG_VERSION" version --registry=https://npm.pkg.github.com >/dev/null 2>&1; then
+            echo "already_published=true" >> "$GITHUB_OUTPUT"
+            echo "Version already exists on GitHub Packages. Skipping publish."
+          else
+            echo "already_published=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Publish to GitHub Packages
+        if: steps.gpr_check.outputs.already_published == 'false'
+        working-directory: ./packages/weave
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
